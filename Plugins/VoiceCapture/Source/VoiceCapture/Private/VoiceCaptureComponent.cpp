@@ -31,25 +31,11 @@ void UVoiceCaptureComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 	if (VoiceCapture->GetCaptureState(VoiceCaptureBytesAvailable) == EVoiceCaptureState::Ok && VoiceCaptureBytesAvailable > 0)
 	{
-		//int16_t VoiceCaptureSample;
 		uint32 VoiceCaptureReadBytes;
-		//float VoiceCaptureTotalSquared = 0;
 
 		IncomingVoiceData.SetNumUninitialized(VoiceCaptureBytesAvailable);
 
 		VoiceCapture->GetVoiceData(IncomingVoiceData.GetData(), VoiceCaptureBytesAvailable, VoiceCaptureReadBytes);
-
-		/*for (uint32 i = 0; i < (VoiceCaptureReadBytes / 2); i++)
-		{
-			VoiceCaptureSample = (IncomingVoiceData[i * 2 + 1] << 8) | IncomingVoiceData[i * 2];
-			VoiceCaptureTotalSquared += ((float)VoiceCaptureSample * (float)VoiceCaptureSample);
-		}
-
-		float VoiceCaptureMeanSquare = (2 * (VoiceCaptureTotalSquared / IncomingVoiceData.Num()));
-		float VoiceCaptureRms = FMath::Sqrt(VoiceCaptureMeanSquare);
-		float VoiceCaptureFinalVolume = ((VoiceCaptureRms / 32768.0) * 200.f);
-
-		VoiceCaptureVolume = VoiceCaptureFinalVolume;*/
 		CapturedSoundWave->QueueAudio(IncomingVoiceData.GetData(), VoiceCaptureReadBytes);
 	}
 
